@@ -274,7 +274,7 @@ return (
         {/* Navbar section */}
         <div className="navbar" style={{ backgroundColor: '#4CAF50', color: '#fff', padding: '15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '20px' }}>
             <a href="/" className="luxury" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}> 
-                <img style={{width:'50px'}} src="https://cdn.pixabay.com/photo/2020/08/05/13/12/eco-5465432_1280.png" alt="Logo" className="logo" />
+                <img src="https://cdn.pixabay.com/photo/2020/08/05/13/12/eco-5465432_1280.png" alt="Logo" className="logo" />
                 <div style={{ marginLeft: '15px' }}> {/* Add some margin to create space between the image and text */}
                     <h3 style={{ color: 'white', margin: 0 }}>Paradise Nursery</h3>
                     <i style={{ color: 'white' }}>Where Green Meets Serenity</i>
