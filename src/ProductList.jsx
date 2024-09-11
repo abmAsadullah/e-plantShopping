@@ -1,17 +1,14 @@
+
 import React, { useState } from 'react';
 import './ProductList.css';
 import CartItem from './CartItem';
-import { useSelector, useDispatch } from 'react-redux';
 import { addItem } from './CartSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 function ProductList() {
     const [showCart, setShowCart] = useState(false); 
-    const [addedToCart, setAddedToCart] = useState({});
-    const dispatch = useDispatch();
-    const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
-    const cartItemsCount = useSelector(state =>
-        state.cart.items.reduce((total, item) => total + item.quantity, 0)
-    );
+    const [showPlants, setShowPlants] = useState(true); // Inicialmente mostramos a lista de plantas
+
     const plantsArray = [
         {
             category: "Air Purifying Plants",
@@ -219,118 +216,116 @@ function ProductList() {
             ]
         }
     ];
-   const styleObj={
-    backgroundColor: '#4CAF50',
-    color: '#fff!important',
-    padding: '15px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignIems: 'center',
-    fontSize: '20px',
-   }
-   const styleObjUl={
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '1100px',
-   }
-   const styleA={
-    color: 'white',
-    fontSize: '30px',
-    textDecoration: 'none',
-   }
-   const handleCartClick = (e) => {
-    e.preventDefault();
-    setShowCart(true); // Show cart
-};
+    const styleObj = {
+        backgroundColor: '#4CAF50',
+        color: '#fff!important',
+        padding: '15px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        fontSize: '20px',
+    };
 
-const handlePlantsClick = (e) => {
-    e.preventDefault();
-    setShowCart(false); // Show plants list
-};
+    const styleObjUl = {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '1100px',
+    };
 
-const handleAddToCart = (product) => {
-    dispatch(addItem(product)); // Dispatch the product to Redux store
-    setAddedToCart((prevState) => ({
-        ...prevState,
-        [product.name]: true, // Mark the product as added in local state
-    }));
-};
+    const styleA = {
+        color: 'white',
+        fontSize: '30px',
+        textDecoration: 'none',
+    };
 
-const handleRemoveFromCart = (productName) => {
-    // Reset the `addedToCart` state for the removed product
-    setAddedToCart((prevState) => ({
-        ...prevState,
-        [productName]: false, // Set to false so the button becomes "Add to Cart" again
-    }));
-};
+    const handleCartClick = (e) => {
+        e.preventDefault();
+        setShowPlants(false); // Esconder a lista de plantas
+        setShowCart(true); // Mostrar o carrinho
+    };
 
-const handleContinueShopping = () => {
-    setShowCart(false); // Hide cart and show plants
-};
+    const handlePlantsClick = (e) => {
+        e.preventDefault();
+        setShowPlants(true); // Mostrar a lista de plantas
+        setShowCart(false); // Esconder o carrinho
+    };
 
-return (
-    <div>
-        {/* Navbar section */}
-        <div className="navbar" style={{ backgroundColor: '#4CAF50', color: '#fff', padding: '15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '20px' }}>
-            <a href="/" className="luxury" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}> 
-                <img src="https://cdn.pixabay.com/photo/2020/08/05/13/12/eco-5465432_1280.png" alt="Logo" className="logo" />
-                <div style={{ marginLeft: '15px' }}> {/* Add some margin to create space between the image and text */}
-                    <h3 style={{ color: 'white', margin: 0 }}>Paradise Nursery</h3>
-                    <i style={{ color: 'white' }}>Where Green Meets Serenity</i>
-                </div>
-            </a>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '1100px' }}>
-                <a href="#" onClick={(e) => handlePlantsClick(e)} style={{ color: 'white', fontSize: '30px', textDecoration: 'none' }}>Plants</a>
-                <a href="#" onClick={(e) => handleCartClick(e)} style={{ color: 'white', fontSize: '30px', textDecoration: 'none' }}>
-                    <h1 className="cart">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" id="IconChangeColor" height="68" width="68">
-                            <circle cx="80" cy="216" r="12"></circle>
-                            <circle cx="184" cy="216" r="12"></circle>
-                            <path d="M42.3,72H221.7l-26.4,92.4A15.9,15.9,0,0,1,179.9,176H84.1a15.9,15.9,0,0,1-15.4-11.6L32.5,37.8A8,8,0,0,0,24.8,32H8" fill="none" stroke="#faf9f9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                        </svg>
-                        <span>{cartItemsCount}</span> {/* Display total cart items */}
-                    </h1>
-                </a>
-            </div>
-            
-        </div>
+    const handleContinueShopping = (e) => {
+        setShowCart(false); // Esconder o carrinho e mostrar a lista de plantas
+        setShowPlants(true);
+    };
 
-        {/* Main content */}
-        {!showCart ? (
-            <div className="product-grid">
-                {plantsArray.map((category, index) => (
-                    <div key={index}>
-                        <h1>{category.category}</h1>
-                        <div className="product-list">
-                            {category.plants.map((plant, plantIndex) => (
-                                <div className="product-card" key={plantIndex}>
-                                    <img className="product-image" src={plant.image} alt={plant.name} />
-                                    <div className="product-title">{plant.name}</div>
-                                    <p>{plant.description}</p>
-                                    <p>{plant.cost}</p>
-                                    <button
-                                        className="product-button"
-                                        style={{
-                                            backgroundColor: addedToCart[plant.name] ? 'gray' : '#4CAF50',
-                                            cursor: addedToCart[plant.name] ? 'not-allowed' : 'pointer',
-                                        }}
-                                        onClick={() => handleAddToCart(plant)}
-                                        disabled={addedToCart[plant.name]}
-                                    >
-                                        {addedToCart[plant.name] ? 'Added to Cart' : 'Add to Cart'}
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
+    const [addedToCart, setAddedToCart] = useState({});
+    const dispatch = useDispatch();
+
+    const handleAddToCart = (product) => {
+        dispatch(addItem(product));
+        setAddedToCart((prevState) => ({
+            ...prevState,
+            [product.name]: true, // Indicar que o produto foi adicionado ao carrinho
+        }));
+    };
+
+    // Obter a quantidade total de itens do carrinho
+    const totalQuantity = useSelector(state => state.cart.totalQuantity);
+
+    return (
+        <div>
+            <div className="navbar" style={styleObj}>
+                <div className="tag">
+                    <div className="luxury">
+                        <img src="https://cdn.pixabay.com/photo/2020/08/05/13/12/eco-5465432_1280.png" alt="" />
+                        <a href="/" style={{ textDecoration: 'none' }}>
+                            <div>
+                                <h3 style={{ color: 'white' }}>Paradise Nursery</h3>
+                                <i style={{ color: 'white' }}>Where Green Meets Serenity</i>
+                            </div>
+                        </a>
                     </div>
-                ))}
+                </div>
+                <div style={styleObjUl}>
+                    <div><a href="#" onClick={(e) => handlePlantsClick(e)} style={styleA}>Plants</a></div>
+                    <div>
+                        <a href="#" onClick={(e) => handleCartClick(e)} style={styleA}>
+                            <h1 className='cart'>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" id="IconChangeColor" height="68" width="68">
+                                    <rect width="156" height="156" fill="none"></rect>
+                                    <circle cx="80" cy="216" r="12"></circle>
+                                    <circle cx="184" cy="216" r="12"></circle>
+                                    <path d="M42.3,72H221.7l-26.4,92.4A15.9,15.9,0,0,1,179.9,176H84.1a15.9,15.9,0,0,1-15.4-11.6L32.5,37.8A8,8,0,0,0,24.8,32H8" fill="none" stroke="#faf9f9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" id="mainIconPathAttribute"></path>
+                                </svg>
+                                {/* Exibir a quantidade total no ícone do carrinho */}
+                                {totalQuantity > 0 && <span className="cart-quantity">{totalQuantity}</span>}
+                            </h1>
+                        </a>
+                    </div>
+                </div>
             </div>
-        ) : (
-            <CartItem onContinueShopping={handleContinueShopping} onRemoveItem={handleRemoveFromCart} />
-        )}
-    </div>
-);
+            {!showCart ? (
+                <div className="product-grid">
+                    {plantsArray.map((category, index) => (
+                        <div key={index}>
+                            <h1><div>{category.category}</div></h1>
+                            <div className="product-list">
+                                {category.plants.map((plant, plantIndex) => (
+                                    <div className="product-card" key={plantIndex}>
+                                        <img className="product-image" src={plant.image} alt={plant.name} />
+                                        <div className="product-title">{plant.name}</div>
+                                        <div>{plant.description}</div>
+                                        <div className='product-price'>{plant.cost}</div>
+                                        <button className="product-button" onClick={() => handleAddToCart(plant)}>Add to Cart</button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            ) : (
+                <CartItem onContinueShopping={handleContinueShopping} />
+            )}
+        </div>
+    );
 }
 
 export default ProductList;
